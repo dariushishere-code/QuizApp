@@ -159,7 +159,6 @@ select:focus {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* Loading */
 .loading-card {
   text-align: center;
   padding: 3rem 1.75rem;
@@ -179,7 +178,6 @@ select:focus {
   to { transform: rotate(360deg); }
 }
 
-/* Quiz */
 .quiz-header {
   display: flex;
   justify-content: space-between;
@@ -285,7 +283,6 @@ select:focus {
   margin-top: 0.5rem;
 }
 
-/* Results */
 .score-summary {
   text-align: center;
   margin-bottom: 1.75rem;
@@ -359,7 +356,6 @@ select:focus {
   font-size: 0.85rem;
 }
 
-/* Error */
 #error-screen .card {
   text-align: center;
 }
@@ -369,7 +365,6 @@ select:focus {
   margin-bottom: 1rem;
 }
 
-/* Scrollbar */
 #results-ul::-webkit-scrollbar {
   width: 6px;
 }

@@ -34,7 +34,7 @@ let state = {
   questions: [],
   currentIndex: 0,
   score: 0,
-  answers: [], // { selected, correct, isCorrect }
+  answers: [],
   answered: false,
 };
 
@@ -43,7 +43,6 @@ let timeLeft = 15;
 const TIMER_ENABLED = true;
 const TIMER_SECONDS = 15;
 
-// ---------- Helpers ----------
 function decodeHTML(html) {
   const txt = document.createElement("textarea");
   txt.innerHTML = html;
@@ -104,7 +103,6 @@ function clearState() {
   };
 }
 
-// ---------- Categories ----------
 async function loadCategories() {
   try {
     const res = await fetch("https://opentdb.com/api_category.php");
@@ -121,7 +119,6 @@ async function loadCategories() {
   }
 }
 
-// ---------- Fetch Questions ----------
 async function fetchQuestions() {
   const { amount, difficulty, category } = state.settings;
   let url = `https://opentdb.com/api.php?amount=${amount}&type=multiple`;
@@ -169,7 +166,6 @@ async function fetchQuestions() {
   }
 }
 
-// ---------- Timer ----------
 function startTimer() {
   if (!TIMER_ENABLED) {
     els.timer.classList.add("hidden");
@@ -187,7 +183,6 @@ function startTimer() {
     if (timeLeft <= 0) {
       stopTimer();
       if (!state.answered) {
-        // Auto-mark as unanswered / wrong
         handleAnswer(null);
       }
     }
@@ -201,7 +196,6 @@ function stopTimer() {
   }
 }
 
-// ---------- Render Question ----------
 function renderQuestion() {
   const q = state.questions[state.currentIndex];
   if (!q) return;
@@ -229,7 +223,6 @@ function renderQuestion() {
     els.optionsContainer.appendChild(btn);
   });
 
-  // Restore previous answer if revisiting (from localStorage resume)
   const prev = state.answers[state.currentIndex];
   if (prev) {
     state.answered = true;
@@ -277,7 +270,6 @@ function handleAnswer(selected) {
   saveState();
 }
 
-// ---------- Next / Results ----------
 function goNext() {
   if (state.currentIndex < state.questions.length - 1) {
     state.currentIndex++;
@@ -319,10 +311,8 @@ function showResults() {
   });
 
   showScreen("result");
-  // Keep state so refresh still shows results if desired; clear on restart
 }
 
-// ---------- Event Listeners ----------
 els.startBtn.addEventListener("click", () => {
   state.settings = {
     amount: parseInt(els.amount.value, 10),
@@ -337,7 +327,6 @@ els.nextBtn.addEventListener("click", goNext);
 els.restartBtn.addEventListener("click", () => {
   clearState();
   stopTimer();
-  // Restore form values
   els.amount.value = "10";
   els.difficulty.value = "medium";
   els.category.value = "";
@@ -349,11 +338,9 @@ els.backBtn.addEventListener("click", () => {
   showScreen("start");
 });
 
-// ---------- Init ----------
 async function init() {
   await loadCategories();
 
-  // Restore form from last settings if any
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
     try {
@@ -366,7 +353,6 @@ async function init() {
     } catch {}
   }
 
-  // Resume in-progress quiz if exists
   if (loadState() && state.questions.length > 0) {
     if (state.currentIndex >= state.questions.length) {
       showResults();
